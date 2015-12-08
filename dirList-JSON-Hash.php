@@ -134,6 +134,8 @@ if( $argc < 2 )
     }
   }
 
+  echo "Please be patient because sometime it take long time depend on how big your directory size :)\n";
+
   $outputJSON = json_encode( getDetails( getList($argv[1]), $useHash ), JSON_PRETTY_PRINT);
   $filename = "output-". date("Ymd-His") . ".json";
   $fh = fopen($filename, 'w');
