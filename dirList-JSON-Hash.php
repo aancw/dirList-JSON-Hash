@@ -5,6 +5,8 @@
   dirList-JSON-Hash is Command line tool for directory listing with JSON format, hash(MD5,CRC32,SHA1,SHA256,SHA512) file support and file information. Usefull for generate list of update for application updater.
 
   Developed by aancw < cacaddv[at]gmail[dot]com >
+  Version : 1.1
+  Modified : 14/12/2015 10:05
 
   Some code taken from http://zurb.com/forrst/posts/Generate_a_JSON_list_based_on_files_in_a_directo-GDc
   Thanks to Jason Gerfen( https://github.com/jas- )
@@ -28,6 +30,7 @@ function getList($dir)
     foreach(new RecursiveIteratorIterator($it) as $file)
     {
             $files[] = $file->__toString();
+
     }
     return $files;
 }
@@ -40,12 +43,15 @@ function getList($dir)
  *           populating array with details of each file
  * @return Array $files
  */
-function getDetails($array, $useHash)
+function getDetails($array, $useHash, $realPath, $dirRoot, $urlPrefix)
 {
+
         foreach($array as $file)
         {
           $finfo = finfo_open(FILEINFO_MIME_TYPE);
-          $files[basename($file)]['location'] = $file;
+          $realPathFile = str_replace($realPath, $dirRoot, realPath($file));
+          $files[basename($file)]['location'] = $realPathFile;
+          $files[basename($file)]['url'] = $urlPrefix . $realPathFile;
           $files[basename($file)]['type'] = finfo_file($finfo, $file);
           $files[basename($file)]['size'] = filesize($file);
           $files[basename($file)]['last_modified'] = date ("F d Y H:i:s", filemtime($file));
@@ -108,6 +114,7 @@ function showHelp()
   echo "Usage: php dirList-JSON-Hash [folderpath] [options]\n";
   echo "Options:\n";
   echo "-hash : Include hash file output in JSON\n";
+  echo "-u <url> : Use URL Prefix and the output will be http://blablabla.com/ + File Location\n";
   echo "Bug reports, feedback, admiration, abuse, etc, to: cacaddv[at]gmail[dot]com\n";
   exit;
 }
@@ -126,17 +133,25 @@ if( $argc < 2 )
   echo "\ndirList-JSON-Hash by aancw\n\n";
 
   $useHash = false;
+  $urlPrefix = "";
 
   for ($i = 1; $i < $argc; $i++)
   {
     if($argv[$i] == "-hash"){
       $useHash = true;
     }
+    if($argv[$i] == "-u")
+    {
+      $urlPrefix = $argv[$i+1];
+    }
   }
 
   echo "Please be patient because sometime it take long time depend on how big your directory size :)\n";
 
-  $outputJSON = json_encode( getDetails( getList($argv[1]), $useHash ), JSON_PRETTY_PRINT);
+  $realPath = realpath( $argv[1] );
+  $dirRoot = basename( $realPath );
+
+  $outputJSON = json_encode( getDetails( getList($argv[1]), $useHash, $realPath, $dirRoot, $urlPrefix ), JSON_PRETTY_PRINT);
   $filename = "output-". date("Ymd-His") . ".json";
   $fh = fopen($filename, 'w');
   fwrite($fh, $outputJSON);
