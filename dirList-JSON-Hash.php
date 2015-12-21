@@ -5,8 +5,8 @@
   dirList-JSON-Hash is Command line tool for directory listing with JSON format, hash(MD5,CRC32,SHA1,SHA256,SHA512) file support and file information. Usefull for generate list of update for application updater.
 
   Developed by aancw < cacaddv[at]gmail[dot]com >
-  Version : 1.1
-  Modified : 14/12/2015 10:05
+  Version : 1.1.1
+  Modified : 21/12/2015 18:54
 
   Some code taken from http://zurb.com/forrst/posts/Generate_a_JSON_list_based_on_files_in_a_directo-GDc
   Thanks to Jason Gerfen( https://github.com/jas- )
@@ -15,7 +15,6 @@
 
 // Set timezone fot date function
 date_default_timezone_set('GMT');
-
 /*
  * @name getList
  * @param Array $dir
@@ -50,18 +49,23 @@ function getDetails($array, $useHash, $realPath, $dirRoot, $urlPrefix)
         {
           $finfo = finfo_open(FILEINFO_MIME_TYPE);
           $realPathFile = str_replace($realPath, $dirRoot, realPath($file));
-          $files[basename($file)]['location'] = $realPathFile;
-          $files[basename($file)]['url'] = $urlPrefix . $realPathFile;
-          $files[basename($file)]['type'] = finfo_file($finfo, $file);
-          $files[basename($file)]['size'] = filesize($file);
-          $files[basename($file)]['last_modified'] = date ("F d Y H:i:s", filemtime($file));
 
-          if($useHash == true){
-            $files[basename($file)]['md5'] = md5_file($file);
-            $files[basename($file)]['crc32'] = hash_file('crc32', $file);
-            $files[basename($file)]['sha1'] = hash_file('sha1', $file);
-            $files[basename($file)]['sha256'] = hash_file('sha256', $file);
-            $files[basename($file)]['sha512'] = hash_file('sha512', $file);
+          // Exclude dir from list
+          if( !is_dir($realPathFile) )
+          {
+            $files[$realPathFile]['location'] = $realPathFile;
+            $files[$realPathFile]['url'] = $urlPrefix . $realPathFile;
+            $files[$realPathFile]['type'] = finfo_file($finfo, $file);
+            $files[$realPathFile]['size'] = filesize($file);
+            $files[$realPathFile]['last_modified'] = date ("F d Y H:i:s", filemtime($file));
+
+            if($useHash == true){
+              $files[$realPathFile]['md5'] = md5_file($file);
+              $files[$realPathFile]['crc32'] = hash_file('crc32', $file);
+              $files[$realPathFile]['sha1'] = hash_file('sha1', $file);
+              $files[$realPathFile]['sha256'] = hash_file('sha256', $file);
+              $files[$realPathFile]['sha512'] = hash_file('sha512', $file);
+            }
           }
 
           finfo_close($finfo);

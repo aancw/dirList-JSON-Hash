@@ -19,3 +19,7 @@ v1.1 - 14/12/2015
 - Remove Full PATH Directory
 - Set Root Directory from Last PATH
 - Add URL Prefix Mode
+
+v1.1.1 - 21/12/2015
+- Update filename to full Path Filename because it will not generate list if same filename (not accurate)
+- Exclude Directory from scanning
