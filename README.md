@@ -23,3 +23,7 @@ v1.1 - 14/12/2015
 v1.1.1 - 21/12/2015
 - Update filename to full Path Filename because it will not generate list if same filename (not accurate)
 - Exclude Directory from scanning
+
+v1.1.2 - 22/12/2015
+
+- Update exclude directory from scanning 

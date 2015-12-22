@@ -44,14 +44,13 @@ function getList($dir)
  */
 function getDetails($array, $useHash, $realPath, $dirRoot, $urlPrefix)
 {
-
         foreach($array as $file)
         {
           $finfo = finfo_open(FILEINFO_MIME_TYPE);
           $realPathFile = str_replace($realPath, $dirRoot, realPath($file));
 
           // Exclude dir from list
-          if( !is_dir($realPathFile) )
+          if( is_dir($file) == false )
           {
             $files[$realPathFile]['location'] = $realPathFile;
             $files[$realPathFile]['url'] = $urlPrefix . $realPathFile;
