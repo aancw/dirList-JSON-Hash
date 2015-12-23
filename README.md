@@ -6,6 +6,7 @@ dirList-JSON-Hash is Command line tool for directory listing with JSON output fo
 * JSON Output Format
 * Beautiful JSON Output
 * Fast
+* Debug Progress Support
 * Full mime type detection
 * URL Prefix for Updater
 
