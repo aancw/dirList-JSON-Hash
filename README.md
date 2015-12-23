@@ -27,3 +27,7 @@ v1.1.1 - 21/12/2015
 v1.1.2 - 22/12/2015
 
 - Update exclude directory from scanning 
+
+v1.1.3 - 23/12/2015
+
+- Add Progres file debug support

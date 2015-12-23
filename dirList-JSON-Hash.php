@@ -5,8 +5,8 @@
   dirList-JSON-Hash is Command line tool for directory listing with JSON format, hash(MD5,CRC32,SHA1,SHA256,SHA512) file support and file information. Usefull for generate list of update for application updater.
 
   Developed by aancw < cacaddv[at]gmail[dot]com >
-  Version : 1.1.1
-  Modified : 21/12/2015 18:54
+  Version : 1.1.3
+  Modified : 23/12/2015 11:23
 
   Some code taken from http://zurb.com/forrst/posts/Generate_a_JSON_list_based_on_files_in_a_directo-GDc
   Thanks to Jason Gerfen( https://github.com/jas- )
@@ -15,6 +15,7 @@
 
 // Set timezone fot date function
 date_default_timezone_set('GMT');
+#ini_set('memory_limit','-1'); // Uncomment if you want enable unlimit memory for execution
 /*
  * @name getList
  * @param Array $dir
@@ -65,8 +66,8 @@ function getDetails($array, $useHash, $realPath, $dirRoot, $urlPrefix)
               $files[$realPathFile]['sha256'] = hash_file('sha256', $file);
               $files[$realPathFile]['sha512'] = hash_file('sha512', $file);
             }
+	   echo "Processing File " . $realPathFile ." ...\n";
           }
-
           finfo_close($finfo);
         }
     return array('files'=>$files);
@@ -156,6 +157,7 @@ if( $argc < 2 )
 
   $outputJSON = json_encode( getDetails( getList($argv[1]), $useHash, $realPath, $dirRoot, $urlPrefix ), JSON_PRETTY_PRINT);
   $filename = "output-". date("Ymd-His") . ".json";
+  echo "Creating JSON File " .$filename."\n";
   $fh = fopen($filename, 'w');
   fwrite($fh, $outputJSON);
   fclose($fh);
