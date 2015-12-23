@@ -31,3 +31,7 @@ v1.1.2 - 22/12/2015
 v1.1.3 - 23/12/2015
 
 - Add Progres file debug support
+
+v1.1.4 24/12/2015
+
+- Remove last directory path from JSON location

@@ -48,7 +48,10 @@ function getDetails($array, $useHash, $realPath, $dirRoot, $urlPrefix)
         foreach($array as $file)
         {
           $finfo = finfo_open(FILEINFO_MIME_TYPE);
-          $realPathFile = str_replace($realPath, $dirRoot, realPath($file));
+          $pathFile = str_replace($realPath, $dirRoot, realPath($file));
+
+          // remove last directory path from arguments. ex : /home/user/doc/file.txt to file.txt
+          $realPathFile = str_replace($dirRoot."/", "", $pathFile);
 
           // Exclude dir from list
           if( is_dir($file) == false )
